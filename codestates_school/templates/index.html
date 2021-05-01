@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for key, value in urls.items() %}
+        <a href={{ value }}>{{ key }}</a><br>
+    {% endfor %}
+
+    {% block contents %}
+        <h1>"Wildmental University 백오피스에 오신 것을 환영합니다.</h1>
+    {% endblock %}
+
+    {% block footer %}
+    {% endblock %}
+</body>
+</html>
