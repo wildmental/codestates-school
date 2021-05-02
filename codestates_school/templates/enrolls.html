@@ -1,26 +1,41 @@
 {% extends "index.html" %}
     {% block contents %}
         <h1>수강 및 학점 관리</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>학번</th>
-                    <th>이름</th>
-                    <th>수강 강좌</th>
-                    <th>학점(credit)</th>
-                    <th>평점(grade)</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for enroll in enrolls %}
-                        <tr>
-                            <td>{{ enroll.student.student_no }}</td>
-                            <td>{{ enroll.student.name }}</td>
-                            <td>{{ enroll.lecture.semester }} / {{ enroll.lecture.subject.title }}</td>
-                            <td>{{ enroll.lecture.subject.credit }}</td>
-                            <td>{{ enroll.grade }}</td>
-                        </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>학번</th>
+                        <th>이름</th>
+                        <th>수강 강좌</th>
+                        <th>학점(credit)</th>
+                        <th>평점(grade)</th>
+                        <th>수강취소</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for enroll in enrolls %}
+                            <tr>
+                                <td>{{ enroll.student.student_no }}</td>
+                                <td>{{ enroll.student.name }}</td>
+                                <td>{{ enroll.lecture.semester }} / {{ enroll.lecture.subject.title }}</td>
+                                <td>{{ enroll.lecture.subject.credit }}</td>
+                                <td>
+                                    <form action={{ url_for("enroll_update", pk=enroll.id) }}>
+                                        <label for="grade">
+                                            <input name="pk" type="hidden" value={{ enroll.id }}>
+                                            <input name="grade" type="text" value={{ enroll.grade }}>
+                                        </label>
+                                        {# HTML에서는 GET과 POST 메서드만 지원하기 때문에 PUT 대신 POST 사용 #}
+                                        <button type="submit" formmethod="POST">수정</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    {# DELETE 메서드도 기본 GET 메서드 요청(링크) 사용 #}
+                                    <a href={{ url_for("enroll_del", pk=enroll.id) }}>수강취소</a>
+                                </td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <td><a href={{ url_for("enroll_form") }}>수강생 추가</a></td>
     {% endblock %}

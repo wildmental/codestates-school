@@ -1,8 +1,8 @@
 import os
-from flask import Flask
+from flask import Flask, redirect, url_for, request
 from codestates_school.database import Base, db_session
 from flask import render_template
-from sqlalchemy.orm import joinedload, subqueryload
+from sqlalchemy.orm import joinedload
 
 
 def create_app(test_config=None):
@@ -28,7 +28,7 @@ def create_app(test_config=None):
     urls = {'메인 페이지': 'index',
             '학생 관리': 'student',
             '개설 교과목 관리': 'lecture',
-            '수강 관리': 'enroll'}
+            '수강 관리': 'enroll_list'}
 
     # root page
     @app.route('/')
@@ -64,13 +64,58 @@ def create_app(test_config=None):
                                                    joinedload(model.professor)).all()
         return render_template('lectures.html', lectures=lectures, urls=urls)
 
-    @app.route('/enroll', methods=['GET'], endpoint='enroll')
+    @app.route('/enroll/', methods=['GET'], endpoint='enroll_list')
     def show_enrolls():
         model = Base.classes.enroll
         lecture = Base.classes.lecture
-        enrolls = db_session.query(model).options(joinedload(model.student),
-                                                  joinedload(model.lecture).options(joinedload(lecture.subject))).all()
+        enrolls = db_session.query(model).order_by(model.id).options(joinedload(model.student),
+                                                                     joinedload(model.lecture)
+                                                                     .options(joinedload(lecture.subject))).all()
         return render_template('enrolls.html', enrolls=enrolls, urls=urls)
+
+    @app.route('/enroll/form/', methods=['GET'], endpoint='enroll_form')
+    def enroll_form():
+        model = Base.classes.enroll
+        db_session.query(model)
+        return render_template('enroll_form.html', urls=urls)
+
+    @app.route('/enroll/', methods=['POST'], endpoint='enroll_create')
+    def enroll_create():
+        # 학번으로 학생 테이블 pk 가져오기
+        student_no = request.form.get("student_no")
+        student = Base.classes.student
+        student_id = db_session.query(student).filter_by(student_no=student_no).one().id
+
+        # 과목 코드와 학기 정보로 최신 개설강좌 pk 가져오기
+        subject_code = request.form.get("subject_code")
+        subject = Base.classes.subject
+        subject_id = db_session.query(subject).filter_by(code=subject_code).one().id
+        semester = request.form.get("semester")
+        lecture = Base.classes.lecture
+        lecture_id = db_session.query(lecture).filter_by(semester=semester)\
+                                              .filter_by(subject_id=subject_id).first()
+        grade = request.form.get("grade", None)
+
+        # # enroll 생성 및 저장
+        # enroll = Base.classes.enroll(student_id=student_id, lecture_id=lecture_id, grade=grade)
+        # created = db_session.add(enroll)
+        # db_session.commit()
+        return redirect(url_for("enroll_list"))
+
+    @app.route('/enroll/<pk>/update/', methods=['POST'], endpoint='enroll_update')
+    def enroll_update(pk):
+        grade = request.form.get("grade")
+        model = Base.classes.enroll
+        db_session.query(model).filter(model.id == pk).update({"grade": grade})
+        db_session.commit()
+        return redirect(url_for("enroll_list"))
+
+    @app.route('/enroll/<pk>/del/', methods=['GET'], endpoint='enroll_del')
+    def enroll_delete(pk):
+        model = Base.classes.enroll
+        db_session.query(model).filter_by(id=pk).delete()
+        db_session.commit()
+        return redirect(url_for("enroll_list"))
 
     # 앱 종료시 DB connection 을 함께 종료
     @app.teardown_appcontext

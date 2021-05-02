@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+    {% block contents %}
+        <h1>수강 및 학점 관리</h1>
+        <h3>신규 수강 등록 입력</h3>
+            <form action={{ url_for("enroll_create") }}>
+                <table>
+                    <tbody>
+                            <tr>
+                                <th>학번</th>
+                                <td>
+                                    <label for="student_no"> 학번 입력
+                                            <input name="student_no" type="text">
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>과목코드</th>
+                                <td>
+                                    <label for="subject_code"> 과목코드 입력
+                                            <input name="subject_code" type="text">
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>학기정보</th>
+                                <td>
+                                    <label for="semester"> 학기정보 입력
+                                            <input name="semester" type="text">
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>평점</th>
+                                <td>
+                                    <label for="grade"> 성적 입력
+                                        <input name="grade" type="text">
+                                    </label>
+                                </td>
+                            </tr>
+                    </tbody>
+                </table>
+                <button type="submit" formmethod="POST">등록</button>
+            </form>
+    {% endblock %}
