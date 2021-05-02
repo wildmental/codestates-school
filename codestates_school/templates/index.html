@@ -5,12 +5,17 @@
     <title>Title</title>
 </head>
 <body>
-    {% for key, value in urls.items() %}
-        <a href={{ value }}>{{ key }}</a><br>
-    {% endfor %}
+    {% block backoffice_title %}
+        {#    url reverse를 함수명으로 하는 경우    #}
+        <a href={{ url_for('hello') }}>Hello page</a><br>
+        <h1>"Wildmental University 백오피스에 오신 것을 환영합니다.</h1>
+        {#    url reverse를 endpoint명으로 하는 경우    #}
+        {% for key, value in urls.items() %}
+            <a href={{ url_for(value) }}>{{ key }}</a><br>
+        {% endfor %}
+    {% endblock %}
 
     {% block contents %}
-        <h1>"Wildmental University 백오피스에 오신 것을 환영합니다.</h1>
     {% endblock %}
 
     {% block footer %}

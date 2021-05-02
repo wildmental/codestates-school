@@ -39,21 +39,21 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
-    @app.route('/index', methods=['POST', 'GET', 'PUT', 'DELETE'])
+    @app.route('/index', methods=['GET'], endpoint='index')
     def show_index():
         return render_template('index.html', urls=urls)
 
-    @app.route('/student', methods=['POST', 'GET', 'PUT', 'DELETE'])
+    @app.route('/student', methods=['GET'], endpoint='student')
     def show_students():
         students = Base.classes.student.query.all()
         return render_template('students.html', students=students, urls=urls)
 
-    @app.route('/lecture', methods=['POST', 'GET', 'PUT', 'DELETE'])
+    @app.route('/lecture', methods=['GET'], endpoint='lecture')
     def show_lectures():
         lectures = Base.classes.lecture.query.all()
         return render_template('lectures.html', lectures=lectures, urls=urls)
 
-    @app.route('/enroll', methods=['POST', 'GET', 'PUT', 'DELETE'])
+    @app.route('/enroll', methods=['GET'], endpoint='enroll')
     def show_enrolls():
         enrolls = Base.classes.enroll.query.all()
         return render_template('enrolls.html', enrolls=enrolls, urls=urls)
