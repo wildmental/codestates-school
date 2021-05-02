@@ -1,5 +1,30 @@
 {% extends 'index.html' %}
     {% block contents %}
-        <h1>교과목 관리</h1>
-        {{ lectures }}
+        <h1>개설 교과목 관리</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>학과</th>
+                    <th>개설학기</th>
+                    <th>과목코드</th>
+                    <th>과목명</th>
+                    <th>강의실</th>
+                    <th>담당교수</th>
+                    <th>학점</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lecture in lectures %}
+                        <tr>
+                            <td>{{ lecture.subject.department.dept_name }}</td>
+                            <td>{{ lecture.semester }}</td>
+                            <td>{{ lecture.subject.code }}</td>
+                            <td>{{ lecture.subject.title }}</td>
+                            <td>{{ lecture.room.building.name }} / {{ lecture.room.room_no }}</td>
+                            <td>{{ lecture.professor.name }}</td>
+                            <td>{{ lecture.subject.credit }}</td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endblock %}

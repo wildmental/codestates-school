@@ -1,5 +1,40 @@
 {% extends 'index.html' %}
     {% block contents %}
         <h1>학생 관리</h1>
-        {{ students }}
+        <table>
+            <thead>
+                <tr>
+                    <th>소속</th>
+                    <th>학번</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>주소</th>
+                    <th>입학일자</th>
+                    <th>학과</th>
+                    <th>수료학기 수</th>
+                    <th>졸업여부</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                        <tr>
+                            <td>{{ student.school.school_name }}</td>
+                            <td>{{ student.student_no }}</td>
+                            <td>{{ student.name }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.address }}</td>
+                            <td>{{ student.admission_date }}</td>
+                            <td>
+                                {% if student.department %}
+                                    {{ student.department.dept_name }}
+                                {% else %}
+                                    미정
+                                {% endif %}
+                            </td>
+                            <td>{{ student.semesters_finished }}</td>
+                            <td>{{ student.is_graduated }}</td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endblock %}

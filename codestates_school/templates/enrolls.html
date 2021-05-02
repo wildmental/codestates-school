@@ -1,5 +1,26 @@
 {% extends "index.html" %}
     {% block contents %}
-        <h1>수강 관리</h1>
-        {{ enrolls }}
+        <h1>수강 및 학점 관리</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>학번</th>
+                    <th>이름</th>
+                    <th>수강 강좌</th>
+                    <th>학점(credit)</th>
+                    <th>평점(grade)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for enroll in enrolls %}
+                        <tr>
+                            <td>{{ enroll.student.student_no }}</td>
+                            <td>{{ enroll.student.name }}</td>
+                            <td>{{ enroll.lecture.semester }} / {{ enroll.lecture.subject.title }}</td>
+                            <td>{{ enroll.lecture.subject.credit }}</td>
+                            <td>{{ enroll.grade }}</td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     {% endblock %}

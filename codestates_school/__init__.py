@@ -26,7 +26,7 @@ def create_app(test_config=None):
     app.debug = True
     urls = {'메인 페이지': 'index',
             '학생 관리': 'student',
-            '교과목 관리': 'lecture',
+            '개설 교과목 관리': 'lecture',
             '수강 관리': 'enroll'}
 
     # root page
