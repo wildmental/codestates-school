@@ -93,13 +93,13 @@ def create_app(test_config=None):
         semester = request.form.get("semester")
         lecture = Base.classes.lecture
         lecture_id = db_session.query(lecture).filter_by(semester=semester)\
-                                              .filter_by(subject_id=subject_id).first()
+                                              .filter_by(subject_id=subject_id).first().id
         grade = request.form.get("grade", None)
 
-        # # enroll 생성 및 저장
-        # enroll = Base.classes.enroll(student_id=student_id, lecture_id=lecture_id, grade=grade)
-        # created = db_session.add(enroll)
-        # db_session.commit()
+        # enroll 생성 및 저장
+        enroll = Base.classes.enroll(student_id=student_id, lecture_id=lecture_id, grade=grade)
+        db_session.add(enroll)
+        db_session.commit()
         return redirect(url_for("enroll_list"))
 
     @app.route('/enroll/<pk>/update/', methods=['POST'], endpoint='enroll_update')
