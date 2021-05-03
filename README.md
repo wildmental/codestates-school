@@ -14,7 +14,7 @@
 
 - Heroku 배포 주소
 
-  : https://codestates-school.herokuapp.com/
+  : https://codestates-school.herokuapp.com/index
 
 - 프로젝트 상세 설명(Google Slide) 
 
